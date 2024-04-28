@@ -10,16 +10,18 @@ public class Appointment {
 
     private String id;
     private String date;
+
     private String userUID;
-    private Date created_at;
-    private Date updated_at;
+    private String created_at;
+    private String updated_at;
 
     public Appointment() {}
-    public Appointment(String id, String date, Date created_at, Date updated_at) {
-        this.id = id;
+    public Appointment(String date) {
+        Date currentTime = new Date();
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
         this.date = date;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
+        this.created_at = dateFormat.format(currentTime);
+        this.updated_at = dateFormat.format(currentTime);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
@@ -27,14 +29,6 @@ public class Appointment {
         } else {
             this.userUID = "";
         }
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getId() {
-        return id;
     }
 
     public String getDate() {
@@ -46,12 +40,12 @@ public class Appointment {
     }
 
     public String getCreated_at() {
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
-        return dateFormat.format(created_at);
+        return created_at;
     }
 
     public String getUpdated_at() {
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
-        return dateFormat.format(updated_at);
+        return updated_at;
     }
+
+
 }

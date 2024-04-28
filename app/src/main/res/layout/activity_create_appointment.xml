@@ -27,12 +27,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <Spinner
+        android:id="@+id/timeSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/appointmentDateSelector" />
+
     <Button
         android:id="@+id/confirm_button"
         android:text="@string/confirm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:onClick="showAppointments"/>
+        android:onClick="createAppointment"/>
 
 </LinearLayout>

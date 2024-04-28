@@ -53,7 +53,6 @@ public class AppointmentActivity extends AppCompatActivity {
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                         Appointment item = document.toObject(Appointment.class);
-                        item.setId(document.getId());
                         mAppointmentsData.add(item);
                     }
 
