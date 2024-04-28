@@ -1,5 +1,6 @@
 package com.example.ultrahang;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ public class RegistrationActivity extends AppCompatActivity {
     EditText fullNameEditText;
     private SharedPreferences preferences;
     private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,10 +66,16 @@ public class RegistrationActivity extends AppCompatActivity {
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, task -> {
             if(task.isSuccessful()){
                 Toast.makeText(RegistrationActivity.this, "Sikeres regisztráció.", Toast.LENGTH_LONG).show();
+                appointments();
             } else {
                 Toast.makeText(RegistrationActivity.this, "Sikertelen regisztráció: ", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void appointments() {
+        Intent intent = new Intent(this, AppointmentActivity.class);
+        startActivity(intent);
     }
 
 }

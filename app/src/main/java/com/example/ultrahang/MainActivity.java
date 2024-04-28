@@ -20,7 +20,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         int orientation = getResources().getConfiguration().orientation;
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             setContentView(R.layout.activity_main);
@@ -40,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, task -> {
             if(task.isSuccessful()){
                 Toast.makeText(MainActivity.this, "Bejelentkezés sikeres!", Toast.LENGTH_LONG).show();
+                appointments();
             } else {
                 Toast.makeText(MainActivity.this, "Bejelentkezés sikertelen.", Toast.LENGTH_LONG).show();
             }
@@ -49,6 +49,11 @@ public class MainActivity extends AppCompatActivity {
     public void registration(View view) {
         Intent intent = new Intent(this, RegistrationActivity.class);
         intent.putExtra("SECRET_KEY", SECRET_KEY);
+        startActivity(intent);
+    }
+
+    private void appointments() {
+        Intent intent = new Intent(this, AppointmentActivity.class);
         startActivity(intent);
     }
 
