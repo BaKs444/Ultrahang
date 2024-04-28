@@ -9,13 +9,13 @@ import java.util.Date;
 public class Appointment {
 
     private String id;
-    private Date date;
+    private String date;
     private String userUID;
     private Date created_at;
     private Date updated_at;
 
     public Appointment() {}
-    public Appointment(String id, Date date, Date created_at, Date updated_at) {
+    public Appointment(String id, String date, Date created_at, Date updated_at) {
         this.id = id;
         this.date = date;
         this.created_at = created_at;
@@ -38,8 +38,7 @@ public class Appointment {
     }
 
     public String getDate() {
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
-        return dateFormat.format(date);
+        return date;
     }
 
     public String getUserUID() {

@@ -1,6 +1,5 @@
 package com.example.ultrahang;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,12 +10,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Objects;
 
 public class ReserveAppointmentActivity extends AppCompatActivity {
     private static final String LOG_TAG = AppointmentActivity.class.getName();
@@ -27,7 +21,7 @@ public class ReserveAppointmentActivity extends AppCompatActivity {
     private ArrayList<Appointment> mAppointmentsData;
     private CollectionReference mItems;
     ItemClickListener itemClickListener;
-    private Date date;
+    private String date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -63,13 +57,7 @@ public class ReserveAppointmentActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
 
         if (extras != null) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-            try {
-                date = dateFormat.parse(extras.getString("date"));
-            } catch (ParseException e) {
-                Log.w(LOG_TAG, Objects.requireNonNull(e.getMessage()));
-            }
+            date = extras.getString("date");
         }
         queryData();
     }
