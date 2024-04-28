@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">Ultrahang</string>
+    <string name="my_image_description">Main header picture</string>
+    <string name="welcome">Üdvözöljük az 5D ultrahang világában!</string>
+    <string name="loginOrRegisterText">Jelentkezzen be vagy regisztráljon az alkalmazás használatához!</string>
+    <string name="email">E-mail cím</string>
+    <string name="password">Jelszó</string>
+    <string name="login">Bejelentkezés</string>
+    <string name="registration">Regisztráció</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="passwordAgain">Jelszó mégegyszer</string>
+    <string name="fullName">Teljes név</string>
+
+
 </resources>

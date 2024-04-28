@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "171242081835",
+    "project_id": "ultrahang-4efad",
+    "storage_bucket": "ultrahang-4efad.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:171242081835:android:c1dc8bab6c33a65251246e",
+        "android_client_info": {
+          "package_name": "com.example.ultrahang"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_b2VXHOZdaUrPaXW4UzltK-WpbTwZLms"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".RegistrationActivity"
+    tools:ignore="MissingDefaultResource">
+
+    <TextView
+        android:id="@+id/registrationHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Regisztráció"
+        android:textSize="20sp"
+        android:textAlignment="center"
+        android:layout_marginTop="10dp"/>
+
+    <TextView
+        android:id="@+id/registrationText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Az alábbi adatok megadásával regisztrálhat:"
+        android:textSize="15sp"
+        android:textAlignment="center"/>
+
+    <EditText
+        android:id="@+id/editTextEmailRegistration"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/email"
+        android:inputType="textEmailAddress"/>
+
+    <EditText
+        android:id="@+id/editTextPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/password"
+        android:inputType="textPassword"/>
+
+    <EditText
+        android:id="@+id/editTextPasswordAgain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/passwordAgain"
+        android:inputType="textPassword"/>
+
+    <EditText
+        android:id="@+id/editTextFullName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/fullName"
+        android:inputType="textPersonName"/>
+
+    <Button
+        android:id="@+id/registrationButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="registration"
+        android:text="@string/registration"/>
+
+</LinearLayout>
