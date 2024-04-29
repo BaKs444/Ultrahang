@@ -67,7 +67,8 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
             mDateText.setText(currentItem.getDate());
             mCreatedAtTime.setText(currentItem.getCreated_at());
             mUpdatedAtTime.setText(currentItem.getUpdated_at());
-            //itemView.findViewById(R.id.delete).setOnClickListener(view -> ((AppointmentActivity)mContext).deleteAppointment(currentItem));
+            itemView.findViewById(R.id.delete).setOnClickListener(view -> ((AppointmentActivity)mContext).deleteAppointment(currentItem));
+            itemView.findViewById(R.id.update_date).setOnClickListener(view -> ((AppointmentActivity)mContext).updateAppointment(currentItem));
         }
     }
 

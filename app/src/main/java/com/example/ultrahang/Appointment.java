@@ -48,4 +48,11 @@ public class Appointment {
     }
 
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String _getId() {
+        return this.id;
+    }
 }

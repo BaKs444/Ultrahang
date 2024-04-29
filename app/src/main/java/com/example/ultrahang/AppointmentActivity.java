@@ -4,12 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
@@ -53,6 +56,7 @@ public class AppointmentActivity extends AppCompatActivity {
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                         Appointment item = document.toObject(Appointment.class);
+                        item.setId(document.getId());
                         mAppointmentsData.add(item);
                     }
 
@@ -72,4 +76,20 @@ public class AppointmentActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void deleteAppointment(Appointment currentItem) {
+        DocumentReference ref = mItems.document(currentItem._getId());
+        ref.delete()
+                .addOnSuccessListener(success -> {
+                    Log.d(LOG_TAG, "Időpont sikeresen törölve");
+                })
+                .addOnFailureListener(fail -> {
+                    Toast.makeText(this, "Időpont törlése sikertelen", Toast.LENGTH_LONG).show();
+                });
+
+        queryData();
+    }
+
+    public void updateAppointment(Appointment currentItem) {
+
+    }
 }

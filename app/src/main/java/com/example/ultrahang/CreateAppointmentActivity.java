@@ -15,11 +15,18 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Random;
 
 public class CreateAppointmentActivity extends AppCompatActivity implements
@@ -76,16 +83,17 @@ public class CreateAppointmentActivity extends AppCompatActivity implements
 
     public void createAppointment(View view) {
         Appointment appointment = new Appointment(date + " " + spinner.getSelectedItem().toString());
-        db.collection("Appointments")
+
+            db.collection("Appointments")
                 .add(appointment)
                 .addOnSuccessListener(documentReference -> {
                     Toast.makeText(CreateAppointmentActivity.this, "Időpontfoglalás sikeres!", Toast.LENGTH_LONG).show();
                     appointments();
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(CreateAppointmentActivity.this, "Időpontfoglalás siekrtelen!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(CreateAppointmentActivity.this, "Időpontfoglalás sikertelen!", Toast.LENGTH_LONG).show();
                 });
-    }
+        }
 
     private void appointments() {
         Intent intent = new Intent(this, AppointmentActivity.class);
