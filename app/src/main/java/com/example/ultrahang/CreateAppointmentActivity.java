@@ -50,15 +50,30 @@ public class CreateAppointmentActivity extends AppCompatActivity implements
         mItems = mFirestore.collection("Appointments");
     }
 
-    private void queryData(String date) {
+    private void queryData() {
+        Appointment appointment = new Appointment(date + " " + spinner.getSelectedItem().toString());
         mAppointmentsData.clear();
-        mItems.whereEqualTo("date", date)
+        mItems.whereEqualTo("date", appointment.getDate())
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                         Appointment item = document.toObject(Appointment.class);
                         item.setId(document.getId());
                         mAppointmentsData.add(item);
+                    }
+                    if (this.mAppointmentsData.isEmpty()) {
+
+                        db.collection("Appointments")
+                                .add(appointment)
+                                .addOnSuccessListener(documentReference -> {
+                                    Toast.makeText(CreateAppointmentActivity.this, "Időpontfoglalás sikeres!", Toast.LENGTH_LONG).show();
+                                    appointments();
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(CreateAppointmentActivity.this, "Időpontfoglalás sikertelen!", Toast.LENGTH_LONG).show();
+                                });
+                    } else {
+                        Toast.makeText(CreateAppointmentActivity.this, "Az időpont már foglalt!", Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -92,24 +107,15 @@ public class CreateAppointmentActivity extends AppCompatActivity implements
     }
 
     public void createAppointment(View view) {
-        Appointment appointment = new Appointment(date + " " + spinner.getSelectedItem().toString());
-        queryData(appointment.getDate());
-        if (this.mAppointmentsData.isEmpty()) {
-        db.collection("Appointments")
-                .add(appointment)
-                .addOnSuccessListener(documentReference -> {
-                    Toast.makeText(CreateAppointmentActivity.this, "Időpontfoglalás sikeres!", Toast.LENGTH_LONG).show();
-                    appointments();
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(CreateAppointmentActivity.this, "Időpontfoglalás sikertelen!", Toast.LENGTH_LONG).show();
-                });
-        } else {
-            Toast.makeText(CreateAppointmentActivity.this, "Időpontfoglalás sikertelen!", Toast.LENGTH_LONG).show();
-        }
+        queryData();
         }
 
     private void appointments() {
+        Intent intent = new Intent(this, AppointmentActivity.class);
+        startActivity(intent);
+    }
+
+    private void back() {
         Intent intent = new Intent(this, AppointmentActivity.class);
         startActivity(intent);
     }

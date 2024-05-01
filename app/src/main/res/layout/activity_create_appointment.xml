@@ -42,4 +42,12 @@
         android:layout_marginTop="40dp"
         android:onClick="createAppointment"/>
 
+    <Button
+        android:id="@+id/Back"
+        android:text="@string/back"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:onClick="back"/>
+
 </LinearLayout>
