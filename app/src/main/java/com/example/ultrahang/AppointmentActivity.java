@@ -10,9 +10,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -35,6 +37,7 @@ public class AppointmentActivity extends AppCompatActivity {
     private CollectionReference mItems;
     private Integer itemLimit = 5;
     private FirebaseFirestore db;
+    private NotificationHelper mNotificationHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +57,9 @@ public class AppointmentActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
         mItems = mFirestore.collection("Appointments");
         db = FirebaseFirestore.getInstance();
+        mNotificationHelper = new NotificationHelper(this);
         queryData();
+
     }
 
     private void queryData() {
@@ -78,8 +83,8 @@ public class AppointmentActivity extends AppCompatActivity {
 
                     if (mAppointmentsData.isEmpty()) {
                         queryData();
+                    } else {
                     }
-
                     mAdapter.notifyDataSetChanged();
                 })
                 .addOnFailureListener(e -> {
@@ -97,11 +102,11 @@ public class AppointmentActivity extends AppCompatActivity {
         ref.delete()
                 .addOnSuccessListener(success -> {
                     Log.d(LOG_TAG, "Időpont sikeresen törölve");
+                    mNotificationHelper.send("Időpont sikeresen törölve.");
                 })
                 .addOnFailureListener(fail -> {
                     Toast.makeText(this, "Időpont törlése sikertelen", Toast.LENGTH_LONG).show();
                 });
-
         queryData();
     }
 
@@ -179,7 +184,6 @@ public class AppointmentActivity extends AppCompatActivity {
                 .setNegativeButton("Nem", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        // Do nothing, dismiss the dialog
                     }
                 })
                 .show();
