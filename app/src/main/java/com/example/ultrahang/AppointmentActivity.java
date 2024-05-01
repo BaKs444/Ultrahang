@@ -1,7 +1,9 @@
 package com.example.ultrahang;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -147,6 +149,31 @@ public class AppointmentActivity extends AppCompatActivity {
         }, hour, minute, true);
         mTimePicker.setTitle("Válassz!");
         mTimePicker.show();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Toast.makeText(AppointmentActivity.this, "Üdvözöllek újra az alkalmazásban!", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setMessage("Biztosan ki akarsz lépni?")
+                .setPositiveButton("Igen", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                    }
+                })
+                .setNegativeButton("Nem", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // Do nothing, dismiss the dialog
+                    }
+                })
+                .show();
     }
 
 }
