@@ -19,8 +19,11 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 public class AppointmentActivity extends AppCompatActivity {
     private static final String LOG_TAG = AppointmentActivity.class.getName();
@@ -56,9 +59,15 @@ public class AppointmentActivity extends AppCompatActivity {
 
     private void queryData() {
         String currentUserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        Date currentDate = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-M-d HH:mm:ss");
+        String formattedDate = dateFormat.format(currentDate);
+
         mAppointmentsData.clear();
         mItems.limit(itemLimit)
+                .orderBy("date")
                 .whereEqualTo("userUID", currentUserUid)
+                .whereGreaterThanOrEqualTo("date", formattedDate)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
