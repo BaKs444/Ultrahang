@@ -14,7 +14,6 @@ public class NotificationHelper {
     private final int NOTIFICATION_ID = 10;
     private NotificationManager mManager;
     private Context context;
-private NotificationManager mNotificationManager;
     public NotificationHelper(Context context) {
         this.context = context;
         this.mManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -22,7 +21,7 @@ private NotificationManager mNotificationManager;
     }
 
     private void createChannel() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
+        if (mManager == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
             return;
 
         NotificationChannel channel = new NotificationChannel
@@ -36,6 +35,8 @@ private NotificationManager mNotificationManager;
     }
 
     public void send(String message) {
+        if (mManager == null)
+            return;
         Intent intent = new Intent(context, AppointmentActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, NOTIFICATION_ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 

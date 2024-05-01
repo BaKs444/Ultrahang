@@ -1,9 +1,7 @@
 package com.example.ultrahang;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,7 +35,6 @@ public class AppointmentActivity extends AppCompatActivity {
     private CollectionReference mItems;
     private Integer itemLimit = 5;
     private FirebaseFirestore db;
-    private NotificationHelper mNotificationHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +54,6 @@ public class AppointmentActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
         mItems = mFirestore.collection("Appointments");
         db = FirebaseFirestore.getInstance();
-        mNotificationHelper = new NotificationHelper(this);
         queryData();
 
     }
@@ -83,7 +79,6 @@ public class AppointmentActivity extends AppCompatActivity {
 
                     if (mAppointmentsData.isEmpty()) {
                         queryData();
-                    } else {
                     }
                     mAdapter.notifyDataSetChanged();
                 })
@@ -101,8 +96,7 @@ public class AppointmentActivity extends AppCompatActivity {
         DocumentReference ref = mItems.document(currentItem._getId());
         ref.delete()
                 .addOnSuccessListener(success -> {
-                    Log.d(LOG_TAG, "Időpont sikeresen törölve");
-                    mNotificationHelper.send("Időpont sikeresen törölve.");
+                    Toast.makeText(this, "Időpont törlése sikeres", Toast.LENGTH_LONG).show();
                 })
                 .addOnFailureListener(fail -> {
                     Toast.makeText(this, "Időpont törlése sikertelen", Toast.LENGTH_LONG).show();
@@ -170,23 +164,4 @@ public class AppointmentActivity extends AppCompatActivity {
         super.onResume();
         Toast.makeText(AppointmentActivity.this, "Üdvözöllek újra az alkalmazásban!", Toast.LENGTH_SHORT).show();
     }
-
-    @Override
-    public void onBackPressed() {
-        new AlertDialog.Builder(this)
-                .setMessage("Biztosan ki akarsz lépni?")
-                .setPositiveButton("Igen", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        finish();
-                    }
-                })
-                .setNegativeButton("Nem", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    }
-                })
-                .show();
-    }
-
 }
