@@ -55,4 +55,8 @@ public class Appointment {
     public String _getId() {
         return this.id;
     }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
 }

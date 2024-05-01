@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,21 +12,12 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
-
-import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
-import java.util.Random;
 
 public class CreateAppointmentActivity extends AppCompatActivity implements
         View.OnClickListener, AdapterView.OnItemSelectedListener {
@@ -37,6 +27,9 @@ public class CreateAppointmentActivity extends AppCompatActivity implements
     private String date;
     Spinner spinner;
     private FirebaseFirestore db;
+    private ArrayList<Appointment> mAppointmentsData;
+    private CollectionReference mItems;
+    private FirebaseFirestore mFirestore;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +45,23 @@ public class CreateAppointmentActivity extends AppCompatActivity implements
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         db = FirebaseFirestore.getInstance();
+        mAppointmentsData = new ArrayList<>();
+        mFirestore = FirebaseFirestore.getInstance();
+        mItems = mFirestore.collection("Appointments");
+    }
+
+    private void queryData(String date) {
+        mAppointmentsData.clear();
+        mItems.whereEqualTo("date", date)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        Appointment item = document.toObject(Appointment.class);
+                        item.setId(document.getId());
+                        mAppointmentsData.add(item);
+                    }
+                });
+
     }
 
     @Override
@@ -83,8 +93,9 @@ public class CreateAppointmentActivity extends AppCompatActivity implements
 
     public void createAppointment(View view) {
         Appointment appointment = new Appointment(date + " " + spinner.getSelectedItem().toString());
-
-            db.collection("Appointments")
+        queryData(appointment.getDate());
+        if (this.mAppointmentsData.isEmpty()) {
+        db.collection("Appointments")
                 .add(appointment)
                 .addOnSuccessListener(documentReference -> {
                     Toast.makeText(CreateAppointmentActivity.this, "Időpontfoglalás sikeres!", Toast.LENGTH_LONG).show();
@@ -93,10 +104,14 @@ public class CreateAppointmentActivity extends AppCompatActivity implements
                 .addOnFailureListener(e -> {
                     Toast.makeText(CreateAppointmentActivity.this, "Időpontfoglalás sikertelen!", Toast.LENGTH_LONG).show();
                 });
+        } else {
+            Toast.makeText(CreateAppointmentActivity.this, "Időpontfoglalás sikertelen!", Toast.LENGTH_LONG).show();
+        }
         }
 
     private void appointments() {
         Intent intent = new Intent(this, AppointmentActivity.class);
         startActivity(intent);
     }
+
 }

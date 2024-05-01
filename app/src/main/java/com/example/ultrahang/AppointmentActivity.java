@@ -1,11 +1,13 @@
 package com.example.ultrahang;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TimePicker;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,6 +18,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class AppointmentActivity extends AppCompatActivity {
     private static final String LOG_TAG = AppointmentActivity.class.getName();
@@ -26,6 +29,7 @@ public class AppointmentActivity extends AppCompatActivity {
     private AppointmentAdapter mAdapter;
     private CollectionReference mItems;
     private Integer itemLimit = 5;
+    private FirebaseFirestore db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +48,7 @@ public class AppointmentActivity extends AppCompatActivity {
         mAdapter = new AppointmentAdapter(mAppointmentsData,this);
         mRecyclerView.setAdapter(mAdapter);
         mItems = mFirestore.collection("Appointments");
+        db = FirebaseFirestore.getInstance();
         queryData();
     }
 
@@ -91,5 +96,57 @@ public class AppointmentActivity extends AppCompatActivity {
 
     public void updateAppointment(Appointment currentItem) {
 
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                this,
+                (view, selectedYear, selectedMonth, selectedDayOfMonth) -> {
+                    String selectedDate = selectedYear + "-" + (selectedMonth + 1) + "-" + selectedDayOfMonth;
+                    update(selectedDate, currentItem);
+                },
+                year, month, dayOfMonth);
+
+        datePickerDialog.show();
     }
+
+    private void update(String selectedDate, Appointment currentItem) {
+        Calendar mcurrentTime = Calendar.getInstance();
+        int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+        int minute = mcurrentTime.get(Calendar.MINUTE);
+        TimePickerDialog mTimePicker;
+        mTimePicker = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                if (selectedHour >= 12) {
+                    selectedHour = 12;
+                } else if (selectedHour <= 8) {
+                    selectedHour = 8;
+                }
+
+                if (0 <= selectedMinute && selectedMinute <= 29) {
+                    selectedMinute = 0;
+                } else if (30 <= selectedMinute && selectedMinute <= 59) {
+                    selectedMinute = 30;
+                }
+
+        String date = selectedDate + " " +  (selectedHour < 10 ? "0" + String.valueOf(selectedHour) : String.valueOf(selectedHour))  + ":" + (selectedMinute < 10 ? "0" + String.valueOf(selectedMinute) : String.valueOf(selectedMinute)) + ":00";
+        DocumentReference appointmentRef = db.collection("Appointments").document(currentItem._getId());
+        appointmentRef.update("date", date)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(AppointmentActivity.this, "Módosítás sikeres!", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(AppointmentActivity.this, "Módosítás sikertelen!", Toast.LENGTH_SHORT).show();
+                });
+        queryData();
+
+            }
+        }, hour, minute, true);
+        mTimePicker.setTitle("Válassz!");
+        mTimePicker.show();
+    }
+
 }
