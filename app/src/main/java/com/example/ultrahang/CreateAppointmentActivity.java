@@ -90,7 +90,7 @@ public class CreateAppointmentActivity extends AppCompatActivity implements
             @SuppressLint("SetTextI18n")
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                dateEditText.setText(year + "-" + (monthOfYear + 1) +  "-" + dayOfMonth);
+                dateEditText.setText(year + "-" + (monthOfYear < 10 ? "0" + (monthOfYear + 1) : (monthOfYear + 1)) +  "-" + ( dayOfMonth < 10 ? "0" + dayOfMonth : dayOfMonth));
                 date = dateEditText.getText().toString();
                 }
             }, mYear, mMonth, mDay);

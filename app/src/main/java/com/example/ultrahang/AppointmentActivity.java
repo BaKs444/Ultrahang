@@ -61,9 +61,9 @@ public class AppointmentActivity extends AppCompatActivity {
     private void queryData() {
         String currentUserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Date currentDate = new Date();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-M-d HH:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String formattedDate = dateFormat.format(currentDate);
-
+        Log.d("alma2", formattedDate);
         mAppointmentsData.clear();
         mItems.limit(itemLimit)
                 .orderBy("date")
@@ -75,10 +75,6 @@ public class AppointmentActivity extends AppCompatActivity {
                         Appointment item = document.toObject(Appointment.class);
                         item.setId(document.getId());
                         mAppointmentsData.add(item);
-                    }
-
-                    if (mAppointmentsData.isEmpty()) {
-                        queryData();
                     }
                     mAdapter.notifyDataSetChanged();
                 })
@@ -114,7 +110,7 @@ public class AppointmentActivity extends AppCompatActivity {
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 this,
                 (view, selectedYear, selectedMonth, selectedDayOfMonth) -> {
-                    String selectedDate = selectedYear + "-" + (selectedMonth + 1) + "-" + selectedDayOfMonth;
+                    String selectedDate = selectedYear + "-" + ((selectedMonth + 1) < 10 ? "0" + (selectedMonth + 1) : (selectedMonth + 1)) + "-" + (selectedDayOfMonth < 10 ? "0" + selectedDayOfMonth : selectedDayOfMonth);
                     update(selectedDate, currentItem);
                 },
                 year, month, dayOfMonth);
